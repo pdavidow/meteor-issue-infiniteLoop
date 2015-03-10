@@ -1,11 +1,7 @@
-LibraryPieces = new Mongo.Collection('library_pieces', {
-    transform: function (doc) {
-        return LibraryPiece.fromJSONValue(doc);
-    }
-});
+LibraryPieces = new Mongo.Collection('library_pieces');
 
 Meteor.methods({
-    insertLibraryPieceAsJSON: function(object) {
+    insertLibraryPiece: function(object) {
         return LibraryPieces.insert(object);
     },
     removeAllLibraryPieces: function() {
@@ -21,8 +17,8 @@ Meteor.methods({
 Meteor.startup(function () {
     if (Meteor.isClient) {
         Meteor.call('removeAllLibraryPieces');
-        Meteor.call('insertLibraryPieceAsJSON', (new LibraryPiece('n1').toJSONValue()));
-        Meteor.call('insertLibraryPieceAsJSON', (new LibraryPiece('n2').toJSONValue()));
+        Meteor.call('insertLibraryPiece', {name: "n1"});
+        Meteor.call('insertLibraryPiece', {name: "n2"});
     }
 });
 
