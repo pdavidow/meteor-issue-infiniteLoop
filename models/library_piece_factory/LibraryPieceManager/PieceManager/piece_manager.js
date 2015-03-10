@@ -7,19 +7,14 @@ PieceManager = (function() {
 
     Meteor.methods({
         insertPieceAsJSON: function(object) {
-            check(object, Match.ObjectIncluding({name: String, composer: String, ownerId: String}));
-            var duplicate = _findPieceBy_Name_Composer_OwnerId(object.name, object.composer, object.ownerId);
-            if (duplicate) throw new Meteor.Error("insertPieceAsJSON failed", "duplicate found");
-            console.log("insertPieceAsJSON isSimulation?", this.isSimulation);
+            check(object, Match.ObjectIncluding({name: String}));
             return Pieces.insert(object);
         },
         removePieceById: function(id) {
-            console.log("removePieceById isSimulation?", this.isSimulation);
             check(id, String);
             return Pieces.remove(id);
         },
         removeAllPiecesForOwnerId: function(ownerId) {
-            console.log("removeAllPiecesForOwnerId isSimulation?", this.isSimulation);
             check(ownerId, String);
             return Pieces.remove({ownerId: ownerId});
         }
@@ -30,18 +25,12 @@ PieceManager = (function() {
         if (_.isNull(id)) return null;
         return Pieces.findOne({"_id": id});
     };
-    _findPieceBy_Name_Composer_OwnerId = function(name, composer, ownerId) {
-        check(name, String);
-        check(composer, String);
-        check(ownerId, String);
-        return Pieces.findOne({"name": name, "composer": composer, "ownerId": ownerId});
-    };
     _cursorOnAllPieces = function() {
-        return Pieces.find({}, {sort: [["composer", "asc"], ["name", "asc"], ["catalogReference", "asc"], ["publicationDate", "asc"]]});
+        return Pieces.find({});
     };
     _cursorOnPiecesForOwnerId = function(id) {
         check(id, String);
-        return Pieces.find({ownerId: id}, {sort: [["composer", "asc"], ["name", "asc"], ["catalogReference", "asc"], ["publicationDate", "asc"]]});
+        return Pieces.find({ownerId: id});
     };
     _cursorOnPiecesForCurrentUser = function() {
         var id = Meteor.userId();
@@ -53,14 +42,6 @@ PieceManager = (function() {
         _insertPiece = function(piece, callback) {
             check(piece, Piece);
             var object = piece.toJSONValue();
-            if (!callback) {
-                Session.set("insertPiece_error", null);
-                Session.set("insertPiece_result", null);
-                callback = function (error, result) {
-                    if (error) Session.set("insertPiece_error", error);
-                    if (result) Session.set("insertPiece_result", result);
-                };
-            }
             Meteor.call('insertPieceAsJSON', object, callback);
         };
         _removePiece = function(piece) {
@@ -69,20 +50,10 @@ PieceManager = (function() {
         };
         _removePieceById = function(id) {
             check(id, String);
-            Session.set("removePieceById_error", null);
-            Session.set("removePieceById_result", null);
-            Meteor.call('removePieceById', id, function (error, result) {
-                if (error) Session.set("removePieceById_error", error);
-                if (result) Session.set("removePieceById_result", result);
-            });
+            Meteor.call('removePieceById', id);
         };
         _removeAllForOwnerId = function(ownerId) {
-            Session.set("removeAllPiecesForOwnerId_error", null);
-            Session.set("removeAllPiecesForOwnerId_result", null);
-            Meteor.call('removeAllPiecesForOwnerId', ownerId, function (error, result) {
-                if (error) Session.set("removeAllPiecesForOwnerId_error", error);
-                if (result) Session.set("removeAllPiecesForOwnerId_result", result);
-            });
+            Meteor.call('removeAllPiecesForOwnerId', ownerId);
         };
         _removeAllForCurrentUser = function() {
             var id = Meteor.userId();
@@ -93,7 +64,6 @@ PieceManager = (function() {
 
     serverAPI = {
         findPieceBy_Id: _findPieceBy_Id,
-        findPieceBy_Name_Composer_OwnerId: _findPieceBy_Name_Composer_OwnerId,
         cursorOnAllPieces: _cursorOnAllPieces, // pub/sub nonwithstanding
         cursorOnPiecesForOwnerId: _cursorOnPiecesForOwnerId,
         cursorOnPiecesForCurrentUser: _cursorOnPiecesForCurrentUser
