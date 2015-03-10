@@ -1,7 +1,7 @@
 Session.set("isClick",false);
 
-var currentPieceId = function() {
-    return Session.get("currentPieceId");
+var something = function() {
+    return Session.get("something");
 };
 
 Template.main.helpers({
@@ -11,14 +11,13 @@ Template.main.helpers({
 });
 Template.main.events({
     "click #start": function() {
-        debugger;
         Session.set("isClick",true);
     }
 });
 
 Template.pieces.helpers({
     isDisabled: function() {
-        var id = currentPieceId();
+        something();
         debugger;
         return (new Metronome).isStarted;
     }
