@@ -1,7 +1,5 @@
-var currentPiece = function() {
-    var id = Session.get("currentPieceId");
-    if (!id) return null;
-    return Pieces.findOne({"_id": id});
+var currentPieceId = function() {
+    return Session.get("currentPieceId");
 };
 
 Template.libraryPieces.helpers({
@@ -9,35 +7,12 @@ Template.libraryPieces.helpers({
         return LibraryPieces.find({});
     }
 });
-Template.libraryPieces.events({
-    "click #import": function() {
-        var piece, callback;
-        var id = $('#libraryPieceList').val();
-        var libraryPiece = LibraryPieces.findOne({"_id": id});
-        if (!libraryPiece) return;
-        piece = libraryPiece.asPieceForCurrentUser();
-        callback = function (error, result) {
-            if (result) {
-                var id = result;
-                var callback = function (error, result) {
-                    if (result) Session.set("currentPieceId", id);
-                };
-                Meteor.call("updateCurrentPieceId", id, callback);
-            }
-        };
-        Meteor.call('insertPieceAsJSON', piece.toJSONValue(), callback);
-    }
-});
 
 Template.pieces.helpers({
     isPieceListDisabled: function() {
-        var piece = currentPiece();
+        var id = currentPieceId();
         debugger;
-        //if (piece) return piece.metronome.isStarted;
         return (new Metronome).isStarted;
-    },
-    cursorOnPiecesForCurrentUser: function() {
-        return Pieces.find({ownerId: Meteor.userId()});
     }
 });
 
