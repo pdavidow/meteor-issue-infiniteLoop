@@ -9,7 +9,7 @@ Template.libraryPieces.helpers({
 });
 
 Template.pieces.helpers({
-    isPieceListDisabled: function() {
+    isDisabled: function() {
         var id = currentPieceId();
         debugger;
         return (new Metronome).isStarted;

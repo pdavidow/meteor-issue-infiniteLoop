@@ -27,13 +27,7 @@
 </template>
 
 <template name="pieces">
-    My Pieces
-    <br/>
-    <select id="pieceList" disabled={{isPieceListDisabled}}>
-        {{#each cursorOnPiecesForCurrentUser}}
-            <option value={{_id}}>{{name}}</option>
-        {{/each}}
-    </select>
+    <button id="myPieces" disabled={{isDisabled}}>My Pieces</button>
 </template>
 
 
