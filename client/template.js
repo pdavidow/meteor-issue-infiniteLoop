@@ -33,8 +33,8 @@ Template.pieces.helpers({
     isPieceListDisabled: function() {
         var piece = currentPiece();
         debugger;
-        if (piece) return piece.metronome.isStarted;
-        return false;
+        //if (piece) return piece.metronome.isStarted;
+        return (new Metronome).isStarted;
     },
     cursorOnPiecesForCurrentUser: function() {
         return Pieces.find({ownerId: Meteor.userId()});
