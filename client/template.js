@@ -15,7 +15,7 @@ Template.pieces.helpers({
     isDisabled: function() {
         Session.get("whatever");
         debugger;
-        return (new Metronome).isStarted();
+        return (new Uhoh).isStarted();
     }
 });
 
