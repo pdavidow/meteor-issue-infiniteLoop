@@ -18,13 +18,9 @@ LibraryPiece.prototype = {
     get metronome() {
       return new Metronome();
     },
-    asPieceForOwnerId: function(id) {
-        check(id, String);
-        return new Piece(this.name, id);
-    },
     asPieceForCurrentUser: function() {
         var id = Meteor.userId();
         check(id, String);
-        return this.asPieceForOwnerId(id);
+        return new Piece(this.name, id);
     }
 };
