@@ -1,9 +1,5 @@
 Session.set("isClick",false);
 
-var something = function() {
-    return Session.get("something");
-};
-
 Template.main.helpers({
     isClickStart: function() {
         return Session.get("isClick");
@@ -17,9 +13,9 @@ Template.main.events({
 
 Template.pieces.helpers({
     isDisabled: function() {
-        something();
+        Session.get("whatever");
         debugger;
-        return (new Metronome).isStarted;
+        return (new Metronome).isStarted();
     }
 });
 
