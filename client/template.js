@@ -6,13 +6,14 @@ var currentPiece = function() {
 
 Template.libraryPieces.helpers({
     cursorOnLibraryPieces: function() {
-        return LibraryPieceManager.cursorOnLibraryPieces();
+        return LibraryPieces.find({});
     }
 });
 Template.libraryPieces.events({
     "click #import": function() {
         var callback;
-        var libraryPiece = (LibraryPieceManager.findLibraryPieceBy_Id($('#libraryPieceList').val()));
+        var id = $('#libraryPieceList').val();
+        var libraryPiece = LibraryPieces.findOne({"_id": id})
         if (!libraryPiece) return;
         var piece = libraryPiece.asPieceForCurrentUser();
         callback = function (error, result) {
