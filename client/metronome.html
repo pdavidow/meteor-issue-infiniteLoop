@@ -3,19 +3,18 @@
 </head>
 
 <body>
-    {{> loginButtons}}
-    <br/><br/>
     {{> main}}
 </body>
 
 <template name="main">
-    {{#if currentUser}}
+    <button id="start">Start</button>
+    {{#if isClickStart}}
         {{> pieces}}
     {{/if}}
 </template>
 
 <template name="pieces">
-    <button id="myPieces" disabled={{isDisabled}}>My Pieces</button>
+    <button disabled={{isDisabled}}>UHOH</button>
 </template>
 
 
