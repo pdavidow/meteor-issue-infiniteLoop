@@ -5,6 +5,8 @@
 
 standard-app-packages
 underscore
+autopublish
+insecure
 
 reactive-dict
 accounts-ui
