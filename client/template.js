@@ -1,7 +1,7 @@
 var currentPiece = function() {
     var id = Session.get("currentPieceId");
     if (!id) return null;
-    return PieceManager.findPieceBy_Id(id);
+    return Pieces.findOne({"_id": id});
 };
 
 Template.libraryPieces.helpers({
@@ -19,7 +19,7 @@ Template.libraryPieces.events({
         callback = function (error, result) {
             if (result) UserPieceManager.updateCurrentPieceId(result);
         };
-        PieceManager.insertPiece(piece, callback);
+        Meteor.call('insertPieceAsJSON', piece.toJSONValue(), callback);
     }
 });
 
@@ -31,7 +31,7 @@ Template.pieces.helpers({
         return false;
     },
     cursorOnPiecesForCurrentUser: function() {
-        return PieceManager.cursorOnPiecesForCurrentUser();
+        return Pieces.find({ownerId: Meteor.userId()});
     }
 });
 

@@ -14,6 +14,9 @@ Meteor.methods({
     },
     removeAllLibraryPieces: function() {
         return LibraryPieces.remove({});
+    },
+    insertPieceAsJSON: function(object) {
+        return Pieces.insert(object);
     }
 });
 
