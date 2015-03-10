@@ -8,6 +8,7 @@ Pieces = new Mongo.Collection('pieces', {
         return Piece.fromJSONValue(doc);
     }
 });
+
 Meteor.methods({
     insertLibraryPieceAsJSON: function(object) {
         return LibraryPieces.insert(object);
@@ -17,6 +18,11 @@ Meteor.methods({
     },
     insertPieceAsJSON: function(object) {
         return Pieces.insert(object);
+    },
+    updateCurrentPieceId: function(id) {
+        var currentUserId = Meteor.userId();
+        if (!currentUserId) return null;
+        return Meteor.users.update(currentUserId, {$set: {'currentPieceId': id}});
     }
 });
 

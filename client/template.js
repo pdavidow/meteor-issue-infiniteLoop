@@ -11,13 +11,19 @@ Template.libraryPieces.helpers({
 });
 Template.libraryPieces.events({
     "click #import": function() {
-        var callback;
+        var piece, callback;
         var id = $('#libraryPieceList').val();
-        var libraryPiece = LibraryPieces.findOne({"_id": id})
+        var libraryPiece = LibraryPieces.findOne({"_id": id});
         if (!libraryPiece) return;
-        var piece = libraryPiece.asPieceForCurrentUser();
+        piece = libraryPiece.asPieceForCurrentUser();
         callback = function (error, result) {
-            if (result) UserPieceManager.updateCurrentPieceId(result);
+            if (result) {
+                var id = result;
+                var callback = function (error, result) {
+                    if (result) Session.set("currentPieceId", id);
+                };
+                Meteor.call("updateCurrentPieceId", id, callback);
+            }
         };
         Meteor.call('insertPieceAsJSON', piece.toJSONValue(), callback);
     }
